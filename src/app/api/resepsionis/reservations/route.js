@@ -3,9 +3,13 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import prisma from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
+import { requirePermission } from "@/lib/authorization";
 
 export async function GET() {
   try {
+    const auth = await requirePermission("reservations:manage");
+    if (auth.error) return auth.error;
+
     const cookieStore = await cookies();
     const token = cookieStore.get("nara_session")?.value;
 

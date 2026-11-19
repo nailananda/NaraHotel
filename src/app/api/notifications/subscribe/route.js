@@ -2,9 +2,13 @@
 import prisma from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
 import { cookies } from "next/headers";
+import { requirePermission } from "@/lib/authorization";
 
 export async function POST(request) {
   try {
+    const auth = await requirePermission("notifications:subscribe");
+    if (auth.error) return auth.error;
+
     const cookieStore = await cookies();
     const token = cookieStore.get("nara_session")?.value;
 

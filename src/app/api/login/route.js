@@ -10,19 +10,28 @@ export async function POST(request) {
 
     const email = body.email?.trim().toLowerCase();
     const password = body.password;
+    const loginType = body.loginType;
 
-    // Validasi input
-    if (!email || !password) {
+    if (!email || !password || !loginType) {
       return NextResponse.json(
         {
           success: false,
-          message: "Email dan password wajib diisi.",
+          message: "Email, password, dan jenis login wajib diisi.",
         },
         { status: 400 }
       );
     }
 
-    // Cari pengguna berdasarkan email
+    if (!["tamu", "pengelola"].includes(loginType)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Jenis login tidak valid.",
+        },
+        { status: 400 }
+      );
+    }
+
     const user = await prisma.user.findUnique({
       where: { email },
     });
@@ -37,7 +46,6 @@ export async function POST(request) {
       );
     }
 
-    // Cocokkan password
     const passwordMatch = await bcrypt.compare(
       password,
       user.passwordHash
@@ -53,10 +61,27 @@ export async function POST(request) {
       );
     }
 
-    // Buat sesi login
+    // Pembatasan jenis akun berdasarkan halaman login
+    const allowedRoles =
+      loginType === "tamu"
+        ? ["TAMU"]
+        : ["ADMIN", "RESEPSIONIS", "HOUSEKEEPING"];
+
+    if (!allowedRoles.includes(user.role)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            loginType === "tamu"
+              ? "Akun ini bukan akun reservasi tamu."
+              : "Akun ini tidak memiliki akses pengelola hotel.",
+        },
+        { status: 403 }
+      );
+    }
+
     const token = await createSession(user);
 
-    // Buat respons login
     const response = NextResponse.json({
       success: true,
       message: "Login berhasil!",
@@ -68,7 +93,6 @@ export async function POST(request) {
       },
     });
 
-    // Simpan sesi dalam cookie
     response.cookies.set("nara_session", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

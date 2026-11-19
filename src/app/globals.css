@@ -88,7 +88,7 @@ main > header nav button {
 }
 
 /* =========================
-   HERO - FOTO LATAR
+   HERO
 ========================= */
 
 #beranda {
@@ -148,7 +148,7 @@ main > header nav button {
 }
 
 /* =========================
-   SECTION TENTANG HOTEL
+   TENTANG HOTEL
 ========================= */
 
 #tentang {
@@ -332,6 +332,106 @@ footer a:hover {
 }
 
 /* =========================
+   ANIMASI NARA HOTEL
+========================= */
+
+/* Muncul dari bawah */
+@keyframes naraFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Muncul perlahan */
+@keyframes naraFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Zoom perlahan */
+@keyframes naraZoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Kelas animasi */
+.nara-fade-up {
+  animation: naraFadeUp 0.9s ease both;
+}
+
+.nara-fade-in {
+  animation: naraFadeIn 1.2s ease both;
+}
+
+.nara-zoom-in {
+  animation: naraZoomIn 0.9s ease both;
+}
+
+/* Jeda animasi */
+.nara-delay-1 {
+  animation-delay: 0.2s;
+}
+
+.nara-delay-2 {
+  animation-delay: 0.4s;
+}
+
+.nara-delay-3 {
+  animation-delay: 0.6s;
+}
+
+/* Efek hover gambar */
+.nara-image-hover {
+  transition: transform 0.7s ease;
+}
+
+.nara-image-hover:hover {
+  transform: scale(1.05);
+}
+
+/* Efek hover tombol */
+.nara-button-hover {
+  transition: all 0.3s ease;
+}
+
+.nara-button-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(61, 38, 25, 0.18);
+}
+
+/* =========================
+   SCROLL REVEAL NARA HOTEL
+========================= */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================
    RESPONSIVE
 ========================= */
 
@@ -373,6 +473,7 @@ footer a:hover {
   }
 }
 
+/* Menghormati pengaturan reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -380,5 +481,11 @@ footer a:hover {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

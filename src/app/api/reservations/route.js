@@ -4,12 +4,16 @@ import { cookies } from "next/headers";
 import prisma from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
 import { queuePushNotification } from "@/lib/queue-push-notification";
+import { requirePermission } from "@/lib/authorization";
 
 // ============================================
 // GET: Mengambil reservasi milik pengguna login
 // ============================================
 export async function GET() {
   try {
+    const auth = await requirePermission("reservations:own");
+    if (auth.error) return auth.error;
+
     const cookieStore = await cookies();
     const token = cookieStore.get("nara_session")?.value;
 
@@ -94,6 +98,9 @@ export async function GET() {
 // ============================================
 export async function POST(request) {
   try {
+    const auth = await requirePermission("reservations:create");
+    if (auth.error) return auth.error;
+
     // 1. Periksa sesi login
     const cookieStore = await cookies();
     const token = cookieStore.get("nara_session")?.value;

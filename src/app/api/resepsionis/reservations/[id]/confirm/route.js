@@ -4,9 +4,13 @@ import { cookies } from "next/headers";
 import prisma from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
 import { queuePushNotification } from "@/lib/queue-push-notification";
+import { requirePermission } from "@/lib/authorization";
 
 export async function PATCH(request, { params }) {
   try {
+    const auth = await requirePermission("reservations:manage");
+    if (auth.error) return auth.error;
+
     const cookieStore = await cookies();
     const token = cookieStore.get("nara_session")?.value;
 

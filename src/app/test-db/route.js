@@ -1,8 +1,12 @@
 
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireRole } from "@/lib/rbac";
 
 export async function GET() {
+  const auth = await requireRole("/test-db");
+  if (auth.error) return auth.error;
+
   try {
     await prisma.$connect();
 

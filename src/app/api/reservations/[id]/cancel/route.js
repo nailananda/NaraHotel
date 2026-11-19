@@ -3,9 +3,13 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import prisma from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
+import { requirePermission } from "@/lib/authorization";
 
 export async function PATCH(request, { params }) {
   try {
+    const auth = await requirePermission("reservations:own");
+    if (auth.error) return auth.error;
+
     // 1. Periksa sesi login
     const cookieStore = await cookies();
     const token = cookieStore.get("nara_session")?.value;

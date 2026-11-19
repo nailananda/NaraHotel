@@ -20,6 +20,23 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Role-based access control
+
+API access is checked on the server by `src/lib/authorization.js`. The role is
+loaded from the database for each protected request, so changing a user's role
+takes effect without waiting for the session token to expire.
+
+| Role | Access |
+| --- | --- |
+| `TAMU` | View account, create and manage own reservations, subscribe to notifications |
+| `RESEPSIONIS` | Manage reservations and payments, view rooms, subscribe to notifications |
+| `HOUSEKEEPING` | View rooms and complete cleaning, subscribe to notifications |
+| `ADMIN` | All permissions |
+
+When adding an API route, call `requirePermission` with the permission it needs.
+Keep record ownership checks in the query as well; permission to manage one's
+own reservation does not grant access to another user's reservation.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

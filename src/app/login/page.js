@@ -40,6 +40,7 @@ export default function LoginPage() {
         body: JSON.stringify({
           email: form.email.trim().toLowerCase(),
           password: form.password,
+          loginType: "tamu",
         }),
       });
 
@@ -68,6 +69,13 @@ export default function LoginPage() {
           setMessage(
             "Login berhasil, tetapi sesi belum terbaca. Coba login kembali."
           );
+          return;
+        }
+
+        // Pastikan akun yang masuk benar-benar TAMU.
+        if (sessionResult.data?.role !== "TAMU") {
+          setIsError(true);
+          setMessage("Akun ini bukan akun reservasi tamu.");
           return;
         }
       } catch (sessionError) {
@@ -125,15 +133,15 @@ export default function LoginPage() {
 
         <section className="flex flex-col justify-center p-7 md:p-12">
           <p className="text-sm font-semibold uppercase tracking-widest text-[#A17B54]">
-            Welcome Back
+            LOGIN RESERVASI
           </p>
 
           <h2 className="mt-2 text-3xl font-bold">
-            Masuk Akun
+            Masuk Akun Tamu
           </h2>
 
           <p className="mt-2 text-sm text-gray-500">
-            Masukkan email dan password akunmu.
+            Masukkan email dan password akun tamu untuk melanjutkan reservasi.
           </p>
 
           {message && (
