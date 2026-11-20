@@ -15,8 +15,7 @@ export default function SiteFooter({ isFacilityPage = false }) {
         <div className="text-sm text-[#E5D1BA]">
           <p>Pengalaman menginap yang nyaman dan berkesan.</p>
           <p className="mt-2">
-            © {new Date().getFullYear()} NARA HOTEL. All rights reserved.
-          </p>
+          © 2026 NARA HOTEL. All rights reserved.          </p>
         </div>
       </div>
     </footer>
