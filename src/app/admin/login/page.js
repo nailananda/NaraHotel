@@ -34,11 +34,11 @@ export default function AdminLoginPage() {
       }
 
       if (data.user?.role === "ADMIN") {
-        router.push("/admin");
+        window.location.href = "/admin";
       } else if (data.user?.role === "RESEPSIONIS") {
-        router.push("/resepsionis");
+        window.location.href = "/resepsionis";
       } else if (data.user?.role === "HOUSEKEEPING") {
-        router.push("/housekeeping");
+        window.location.href = "/housekeeping";
       } else {
         setError("Akun ini tidak memiliki akses staf.");
       }
