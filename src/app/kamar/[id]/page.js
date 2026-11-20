@@ -1,10 +1,9 @@
-
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 const formatRupiah = (price) =>
   new Intl.NumberFormat("id-ID", {
@@ -22,7 +21,7 @@ const roomImages = {
     "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1400&q=90",
 };
 
-export default function RoomDetailPage() {
+function RoomDetailContent() {
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -226,7 +225,7 @@ export default function RoomDetailPage() {
 
       {/* FOTO UTAMA */}
       <section className="mx-auto max-w-7xl px-5 md:px-10">
-        <div className="relative h-[300px] overflow-hidden rounded-2xl bg-[#E8D5C0] shadow-lg sm:h-[420px] md:h-[540px]">
+        <div className="relative h-75 overflow-hidden rounded-2xl bg-[#E8D5C0] shadow-lg sm:h-105 md:h-135">
           <Image
             src={image}
             alt={`Foto ${room.name}`}
@@ -237,7 +236,7 @@ export default function RoomDetailPage() {
             className="object-cover"
           />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/5" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/55 via-transparent to-black/5" />
 
           <div className="absolute bottom-6 left-6 right-6 flex flex-col justify-between gap-4 text-white sm:bottom-9 sm:left-10 sm:flex-row sm:items-end">
             <div>
@@ -468,5 +467,13 @@ export default function RoomDetailPage() {
         </p>
       </footer>
     </main>
+  );
+}
+
+export default function RoomDetailPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#F7E9D8]" />}>
+      <RoomDetailContent />
+    </Suspense>
   );
 }
